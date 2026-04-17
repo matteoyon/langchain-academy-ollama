@@ -1,10 +1,19 @@
-![LangChain Academy](https://cdn.prod.website-files.com/65b8cd72835ceeacd4449a53/66e9eba1020525eea7873f96_LCA-big-green%20(2).svg)
+# LangChain Academy: Introduction to LangGraph (Ollama Edition)
 
 ## Introduction
 
-Welcome to LangChain Academy, Introduction to LangGraph! 
+This is a fork of the [LangChain Academy](https://github.com/langchain-ai/langchain-academy) "Introduction to LangGraph" course, modified to run with **local models via [Ollama](https://ollama.com/)** instead of the OpenAI API.
+
+### Key differences from the original course
+
+- **`ChatOllama`** replaces `ChatOpenAI` throughout all notebooks and studio files.
+- Models used: **qwen2.5:3b** (most modules) and **qwen2.5:7b** (structured output in module 5).
+- No `OPENAI_API_KEY` is required for the core exercises.
+- Some prompts include explicit tool-calling instructions as a workaround for local models not respecting `tool_choice` as reliably as OpenAI's API.
+- Generation times can be significantly slower on consumer hardware (e.g., 10–20 minutes for complex multi-agent workflows in module 4).
+
 This is a growing set of modules focused on foundational concepts within the LangChain ecosystem. 
-Module 0 is basic setup and Modules 1 - 5 focus on building in LangGraph, progressively adding more advanced themes.  Module 6 addresses deploying your agents. 
+Module 0 is basic setup and Modules 1 - 5 focus on building in LangGraph, progressively adding more advanced themes. Module 6 addresses deploying your agents. 
 In each module folder, you'll see a set of notebooks. A link to the LangChain Academy lesson is at the top of each notebook to guide you through the topic. Each module also has a `studio` subdirectory, with a set of relevant graphs that we will explore using the LangGraph API and Studio.
 
 ## Setup
@@ -21,7 +30,6 @@ python3 --version
 git clone https://github.com/langchain-ai/langchain-academy.git
 $ cd langchain-academy
 ```
-Or, if you prefer, you can download a zip file [here](https://github.com/langchain-ai/langchain-academy/archive/refs/heads/main.zip).
 
 ### Create an environment and install dependencies
 #### Mac/Linux/WSL
@@ -37,6 +45,24 @@ PS> Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 PS> .\lc-academy-env\Scripts\Activate.ps1
 PS> pip install -r requirements.txt
 ```
+
+### Install Ollama and pull models
+
+1. **Install Ollama** by following the instructions at [https://ollama.com/download](https://ollama.com/download).
+2. **Verify** the installation:
+   ```
+   ollama --version
+   ```
+3. **Pull the required models**:
+   ```
+   ollama pull qwen2.5:3b
+   ollama pull qwen2.5:7b
+   ```
+   `qwen2.5:3b` is used in most modules. `qwen2.5:7b` is used for structured output tasks in module 5.
+4. Make sure the Ollama server is running before starting any notebooks. It starts automatically after installation, or you can run:
+   ```
+   ollama serve
+   ```
 
 ### Running notebooks
 If you don't have Jupyter set up, follow the installation instructions [here](https://jupyter.org/install).
@@ -54,10 +80,6 @@ $ export API_ENV_VAR="your-api-key-here"
 ```
 PS> $env:API_ENV_VAR = "your-api-key-here"
 ```
-
-### Set OpenAI API key
-* If you don't have an OpenAI API key, you can sign up [here](https://openai.com/index/openai-api/).
-*  Set `OPENAI_API_KEY` in your environment 
 
 ### Sign up and Set LangSmith API
 * Sign up for LangSmith [here](https://docs.langchain.com/langsmith/create-account-api-key#create-an-account-and-api-key), find out more about LangSmith and how to use it within your workflow [here](https://www.langchain.com/langsmith). 
@@ -95,11 +117,7 @@ You should see the following output:
 Open your browser and navigate to the Studio UI: `https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024`.
 
 * To use Studio, you will need to create a .env file with the relevant API keys
-* Run this from the command line to create these files for module 1 to 5, as an example:
+* Run this from the command line to create these files for module 4, as an example:
 ```
-for i in {1..5}; do
-  cp module-$i/studio/.env.example module-$i/studio/.env
-  echo "OPENAI_API_KEY=\"$OPENAI_API_KEY\"" > module-$i/studio/.env
-done
 echo "TAVILY_API_KEY=\"$TAVILY_API_KEY\"" >> module-4/studio/.env
 ```
